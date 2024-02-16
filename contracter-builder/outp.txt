@@ -1,0 +1,71 @@
+failed to get console mode for stdout: The handle is invalid.
+failed to get console mode for stdout: The handle is invalid.
+failed to get console mode for stdout: The handle is invalid.
+[1A[1B[0G[?25l[+] Building 0.0s (0/1)                                          docker:default
+[?25h[1A[0G[?25l[+] Building 0.2s (1/2)                                          docker:default
+[36m => [internal] load build definition from ContracterBuilder.dockerfile     0.0s
+[0m[36m => => transferring dockerfile: 648B                                       0.0s
+[0m => [internal] load metadata for docker.io/library/rust:latest             0.1s
+[?25h[1A[1A[1A[1A[0G[?25l[+] Building 0.3s (1/2)                                          docker:default
+[36m => [internal] load build definition from ContracterBuilder.dockerfile     0.0s
+[0m[36m => => transferring dockerfile: 648B                                       0.0s
+[0m => [internal] load metadata for docker.io/library/rust:latest             0.3s
+[?25h[1A[1A[1A[1A[0G[?25l[+] Building 0.5s (1/2)                                          docker:default
+[36m => [internal] load build definition from ContracterBuilder.dockerfile     0.0s
+[0m[36m => => transferring dockerfile: 648B                                       0.0s
+[0m => [internal] load metadata for docker.io/library/rust:latest             0.5s
+[?25h[1A[1A[1A[1A[0G[?25l[+] Building 0.6s (1/2)                                          docker:default
+[36m => [internal] load build definition from ContracterBuilder.dockerfile     0.0s
+[0m[36m => => transferring dockerfile: 648B                                       0.0s
+[0m => [internal] load metadata for docker.io/library/rust:latest             0.6s
+[?25h[1A[1A[1A[1A[0G[?25l[+] Building 0.8s (1/2)                                          docker:default
+[36m => [internal] load build definition from ContracterBuilder.dockerfile     0.0s
+[0m[36m => => transferring dockerfile: 648B                                       0.0s
+[0m => [internal] load metadata for docker.io/library/rust:latest             0.8s
+[?25h[1A[1A[1A[1A[0G[?25l[+] Building 0.9s (1/2)                                          docker:default
+[36m => [internal] load build definition from ContracterBuilder.dockerfile     0.0s
+[0m[36m => => transferring dockerfile: 648B                                       0.0s
+[0m => [internal] load metadata for docker.io/library/rust:latest             0.9s
+[?25h[1A[1A[1A[1A[0G[?25l[+] Building 1.0s (2/2)                                          docker:default
+[36m => [internal] load build definition from ContracterBuilder.dockerfile     0.0s
+[0m[36m => => transferring dockerfile: 648B                                       0.0s
+[0m[36m => [internal] load metadata for docker.io/library/rust:latest             0.9s
+[0m[?25h[1A[1A[1A[1A[0G[?25l[+] Building 1.2s (7/15)                                         docker:default
+[36m => [internal] load .dockerignore                                          0.0s
+[0m[36m => => transferring context: 2B                                            0.0s
+[0m[36m => [ 1/11] FROM docker.io/library/rust:latest@sha256:3c1dc1b48eec1a66a54  0.0s
+[0m[36m => [internal] load build context                                          0.0s
+[0m[36m => => transferring context: 361B                                          0.0s
+[0m[36m => CACHED [ 2/11] RUN apt update                                          0.0s
+[0m[36m => CACHED [ 3/11] RUN apt install nodejs npm build-essential git clang c  0.0s
+[0m => [ 4/11] RUN curl -o https://github.com/paritytech/substrate-contracts  0.2s
+[?25h[1A[1A[1A[1A[1A[1A[1A[1A[1A[0G[?25l[+] Building 1.2s (7/15)                                         docker:default
+[36m => [internal] load .dockerignore                                          0.0s
+[0m[36m => => transferring context: 2B                                            0.0s
+[0m[36m => [ 1/11] FROM docker.io/library/rust:latest@sha256:3c1dc1b48eec1a66a54  0.0s
+[0m[36m => [internal] load build context                                          0.0s
+[0m[36m => => transferring context: 361B                                          0.0s
+[0m[36m => CACHED [ 2/11] RUN apt update                                          0.0s
+[0m[36m => CACHED [ 3/11] RUN apt install nodejs npm build-essential git clang c  0.0s
+[0m => [ 4/11] RUN curl -o https://github.com/paritytech/substrate-contracts  0.2s
+[?25h[1A[1A[1A[1A[1A[1A[1A[1A[1A[0G[?25l[+] Building 1.2s (8/15)                                         docker:default
+[36m => [internal] load build definition from ContracterBuilder.dockerfile     0.0s
+[0m[36m => => transferring dockerfile: 648B                                       0.0s
+[0m[36m => [internal] load metadata for docker.io/library/rust:latest             0.9s
+[0m[36m => [internal] load .dockerignore                                          0.0s
+[0m[36m => => transferring context: 2B                                            0.0s
+[0m[36m => [ 1/11] FROM docker.io/library/rust:latest@sha256:3c1dc1b48eec1a66a54  0.0s
+[0m[36m => [internal] load build context                                          0.0s
+[0m[36m => => transferring context: 361B                                          0.0s
+[0m[36m => CACHED [ 2/11] RUN apt update                                          0.0s
+[0m[36m => CACHED [ 3/11] RUN apt install nodejs npm build-essential git clang c  0.0s
+[0m[31m => ERROR [ 4/11] RUN curl -o https://github.com/paritytech/substrate-con  0.2s
+[0m[?25h------
+ > [ 4/11] RUN curl -o https://github.com/paritytech/substrate-contracts-node/releases/download/v0.35.0/substrate-contracts-node-linux.tar.gz | tar -xvzf substrate-contracts-node-linux.tar.gz:
+0.216 tar (child): substrate-contracts-node-linux.tar.gz: Cannot open: No such file or directory
+0.216 tar (child): Error is not recoverable: exiting now
+0.216 tar: Child returned status 2
+0.216 tar: Error is not recoverable: exiting now
+0.223 curl: no URL specified!
+0.223 curl: try 'curl --help' or 'curl --manual' for more information
+------
