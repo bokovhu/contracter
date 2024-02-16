@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Demo</title>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/bootstrap@5.3.2/dist/js/bootstrap.bundle.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const ConnectionIndicator = () => {
+            return (
+                <nav className="navbar navbar-dark bg-dark">
+                    <div className="container-fluid">
+                        <span className="navbar-brand">Status: Connected</span>
+                        <i className="fas fa-wifi"></i>
+                    </div>
+                </nav>
+            );
+        };
+
+        const CreateContractButton = () => {
+            return (
+                <a className="btn btn-primary mt-3 w-100" href="/pages/contract_editor.html">
+                    <i className="fas fa-plus me-2"></i> Create Contract
+                </a>
+            );
+        };
+
+        const ContractCard = ({ title, icon, number, actionText, actionIcon, children }) => {
+            return (
+                <div className="card m-2">
+                    <div className="card-body d-flex flex-column">
+                        <div className="d-flex align-items-center mb-3">
+                            <i className={`me-3 ${icon}`}></i>
+                            <h5 className="card-title">{title}</h5>
+                        </div>
+                        {children || (
+                            <div className="flex-grow-1 d-flex align-items-center justify-content-center">
+                                <span className="fs-1 fw-bold">{number}</span>
+                            </div>
+                        )}
+                        <a href="#" className="btn btn-link mt-auto">
+                            <i className={actionIcon}></i> {actionText}
+                        </a>
+                    </div>
+                </div>
+            );
+        };
+
+        const DraftContractsContent = () => {
+            return (
+                <div>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Members</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Project Contract</td>
+                                <td>2</td>
+                                <td>
+                                    <a href="/pages/contract_editor.html" className="btn btn-link">
+                                        <i className="fas fa-eye"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            )
+        };
+
+        const LiveContractsContent = () => {
+            return (
+                <div>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Members</th>
+                                <th>Tasks</th>
+                                <th>Rewards</th>
+                                <th>Violations</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Project House</td>
+                                <td>3</td>
+                                <td>5</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>
+                                    <a href="#" className="btn btn-link">
+                                        <i className="fas fa-eye"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            )
+        };
+
+        const TasksContent = () => {
+            return (
+                <div>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Contract</th>
+                                <th>Message</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Project House</td>
+                                <td>Bob has delivered the house foundations. Please check it, and either <strong>Approve</strong> or <strong>Reject</strong> it.</td>
+                                <td>
+                                    <div className="btn-group" role="group">
+                                        <a href="#" className="btn btn-danger btn-small">
+                                            <i className="fas fa-times"></i> Reject
+                                        </a>
+                                        <a href="#" className="btn btn-success btn-small">
+                                            <i className="fas fa-check"></i> Approve
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Project House</td>
+                                <td>You need to deposit payment no. 2 of <strong>1500</strong>.</td>
+                                <td>
+                                    <a href="#" className="btn btn-primary">
+                                        <i className="fas fa-money-bill-wave"></i> Deposit
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            )
+        };
+
+        const RewardsContent = () => {
+            return (
+                <div>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Contract</th>
+                                <th>Message</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Project House</td>
+                                <td>You have earned a reward of <strong>100</strong> for delivering the house foundations.</td>
+                                <td>
+                                    <a href="#" className="btn btn-primary">
+                                        <i className="fas fa-gift"></i> Redeem
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            )
+        };
+
+        const ViolationsContent = () => {
+            return (
+                <div>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Contract</th>
+                                <th>Message</th>
+                                <th>Consequences</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Project House</td>
+                                <td>Fred has not delivered the ordered windows on time.</td>
+                                <td>You earn a reward of <strong>100</strong> as compensation.</td>
+                                <td>
+                                    <a href="#" className="btn btn-danger">
+                                        <i className="fas fa-flag"></i> Report
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            )
+        };
+
+        const App = () => {
+            return (
+                <div>
+                    <ConnectionIndicator />
+                    <div className="container mt-3">
+                        <div className="row">
+                            <div className="col-12">
+                                <CreateContractButton />
+                            </div>
+                            <div className="col-lg-6 col-md-12">
+                                <ContractCard
+                                    title="Draft Contracts"
+                                    icon="fas fa-file-alt"
+                                    number={15}
+                                    actionText="View"
+                                    actionIcon="fas fa-eye"
+                                >
+                                    <DraftContractsContent />
+                                </ContractCard>
+                            </div>
+                            <div className="col-lg-6 col-md-12">
+                                <ContractCard
+                                    title="Live Contracts"
+                                    icon="fas fa-file-signature"
+                                    number={25}
+                                    actionText="View"
+                                    actionIcon="fas fa-eye"
+                                >
+                                    <LiveContractsContent />
+                                </ContractCard>
+                            </div>
+                            <div className="col-lg-6 col-md-12">
+                                <ContractCard
+                                    title="Tasks"
+                                    icon="fas fa-tasks"
+                                    number={10}
+                                    actionText="View"
+                                    actionIcon="fas fa-cog"
+                                >
+                                    <TasksContent />
+                                </ContractCard>
+                            </div>
+                            <div className="col-md-12">
+                                <ContractCard
+                                    title="Rewards"
+                                    icon="fas fa-gift"
+                                    number={5}
+                                    actionText="View"
+                                    actionIcon="fas fa-gift"
+                                >
+                                    <RewardsContent />
+                                </ContractCard>
+                            </div>
+                            <div className="col-lg-6 col-md-12">
+                                <ContractCard
+                                    title="Violations"
+                                    icon="fas fa-exclamation-triangle"
+                                    number={3}
+                                    actionText="View"
+                                    actionIcon="fas fa-flag"
+                                >
+                                    <ViolationsContent />
+                                </ContractCard>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const { createRoot } = ReactDOM;
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

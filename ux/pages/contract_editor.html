@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Project Contract</title>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/bootstrap@5.3.2/dist/js/bootstrap.bundle.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        /* Define the <App /> component globally, to be rendered using createRoot(...).render(<App />) */
+        window.App = () => {
+            const contractData = {
+                title: "Project Contract",
+                members: [
+                    { name: "Alice", address: "123456abcd" },
+                    { name: "Bob", address: "abcd123" }
+                ],
+                clauses: [
+                    {
+                        title: "Alice deposits payment, and Bob accepts the job",
+                        steps: [
+                            { type: "deposit", source: "Alice", value: 100 }
+                        ]
+                    },
+                    {
+                        title: "Bob delivers the software, and Alice tests it",
+                        steps: [
+                            { type: "deliver", source: "Bob", target: "Alice" },
+                            { type: "test", source: "Alice" }
+                        ]
+                    },
+                    {
+                        title: "Bob is rewarded for his work",
+                        steps: [
+                            { type: "reward", target: "Bob", value: 100 }
+                        ]
+                    }
+                ]
+            };
+
+            return (
+                <div>
+                    <ConnectionIndicator />
+                    <ContractEditorModel contractData={contractData} />
+                </div>
+            );
+        };
+
+        const ConnectionIndicator = () => {
+            return (
+                <nav className="navbar navbar-dark bg-dark">
+                    <div className="container-fluid">
+                        <span className="navbar-brand">Status: Connected</span>
+                        <i className="fas fa-wifi"></i>
+                    </div>
+                </nav>
+            );
+        };
+
+        const Clause = ({ title, steps }) => {
+            return (
+                <div className="card mb-3">
+                    <div className="card-header d-flex justify-content-between align-items-center">
+                        <span>{title}</span>
+                        <button type="button" className="btn btn-link">
+                            <i className="fas fa-pencil-alt"></i>
+                        </button>
+                    </div>
+                    <div className="card-body">
+                        {steps && steps.length > 0 ? (
+                            <ul className="list-group list-group-flush">
+                                {steps.map((step, index) => (
+                                    <li key={index} className="list-group-item">
+                                        <span className="badge bg-secondary me-2">
+                                            <i className={getTypeIcon(step.type)}></i>
+                                            {step.type.toUpperCase()}
+                                        </span>
+                                        {step.source && (
+                                            <span className="badge bg-primary me-2">Source: {step.source}</span>
+                                        )}
+                                        {step.target && (
+                                            <span className="badge bg-info me-2">Target: {step.target}</span>
+                                        )}
+                                        {step.value && (
+                                            <span className="badge bg-success">Value: {step.value}</span>
+                                        )}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No steps provided</p>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const getTypeIcon = (type) => {
+            switch (type) {
+                case "deposit":
+                    return "fas fa-coins";
+                case "deliver":
+                    return "fas fa-truck";
+                case "test":
+                    return "fas fa-check";
+                case "reward":
+                    return "fas fa-gift";
+                default:
+                    return "fas fa-question";
+            }
+        };
+
+        const Member = ({ name, address }) => {
+            return (
+                <div className="card mb-3">
+                    <div className="card-header">
+                        <h5 className="card-title">{name}</h5>
+                    </div>
+                    <div className="card-body">
+                        <p className="card-text">Address: {address}</p>
+                    </div>
+                </div>
+            );
+        };
+
+        class ContractEditorModel extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    contractData: props.contractData
+                };
+            }
+
+            render() {
+                const { title, members, clauses } = this.state.contractData;
+                return (
+                    <div className="container">
+                        <h1 className="mt-3 mb-4">{title}</h1>
+                        <h2>Members:</h2>
+                        <div className="row">
+                            {members.map((member, index) => (
+                                <div key={index} className="col-md-6">
+                                    <Member name={member.name} address={member.address} />
+                                </div>
+                            ))}
+                        </div>
+                        <h2>Clauses:</h2>
+                        {clauses.map((clause, index) => (
+                            <Clause key={index} title={clause.title} steps={clause.steps} />
+                        ))}
+                    </div>
+                );
+            }
+        }
+    </script>
+    <script type="text/babel">
+        const { createRoot } = ReactDOM;
+        const App = window.App;
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
