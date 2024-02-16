@@ -63,9 +63,9 @@
                     <table className="table">
                         <thead>
                             <tr>
-                                <th>Title</th>
-                                <th>Members</th>
-                                <th>Actions</th>
+                                <th><i className="fas fa-heading"></i></th>
+                                <th><i className="fas fa-users"></i></th>
+                                <th><i className="fas fa-cogs"></i></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,8 +73,8 @@
                                 <td>Project Contract</td>
                                 <td>2</td>
                                 <td>
-                                    <a href="/pages/contract_editor.html" className="btn btn-link">
-                                        <i className="fas fa-eye"></i> View
+                                    <a href="/pages/contract_editor.html" className="btn btn-link btn-sm mx-2">
+                                        <i className="fas fa-eye"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -90,12 +90,12 @@
                     <table className="table">
                         <thead>
                             <tr>
-                                <th>Title</th>
-                                <th>Members</th>
-                                <th>Tasks</th>
-                                <th>Rewards</th>
-                                <th>Violations</th>
-                                <th>Actions</th>
+                                <th><i className="fas fa-heading"></i></th>
+                                <th><i className="fas fa-users"></i></th>
+                                <th><i className="fas fa-tasks"></i></th>
+                                <th><i className="fas fa-gift"></i></th>
+                                <th><i className="fas fa-exclamation-triangle"></i></th>
+                                <th><i className="fas fa-cogs"></i></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -106,8 +106,8 @@
                                 <td>0</td>
                                 <td>1</td>
                                 <td>
-                                    <a href="#" className="btn btn-link">
-                                        <i className="fas fa-eye"></i> View
+                                    <a href="#" className="btn btn-link btn-sm mx-2">
+                                        <i className="fas fa-eye"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -123,9 +123,9 @@
                     <table className="table">
                         <thead>
                             <tr>
-                                <th>Contract</th>
-                                <th>Message</th>
-                                <th>Actions</th>
+                                <th><i className="fas fa-file-contract"></i></th>
+                                <th><i className="fas fa-envelope"></i></th>
+                                <th><i className="fas fa-cogs"></i></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -133,12 +133,12 @@
                                 <td>Project House</td>
                                 <td>Bob has delivered the house foundations. Please check it, and either <strong>Approve</strong> or <strong>Reject</strong> it.</td>
                                 <td>
-                                    <div className="btn-group" role="group">
-                                        <a href="#" className="btn btn-danger btn-small">
-                                            <i className="fas fa-times"></i> Reject
+                                    <div className="d-flex">
+                                        <a href="#" className="btn btn-danger btn-sm mx-2">
+                                            <i className="fas fa-times"></i>
                                         </a>
-                                        <a href="#" className="btn btn-success btn-small">
-                                            <i className="fas fa-check"></i> Approve
+                                        <a href="#" className="btn btn-success btn-sm mx-2">
+                                            <i className="fas fa-check"></i>
                                         </a>
                                     </div>
                                 </td>
@@ -147,8 +147,8 @@
                                 <td>Project House</td>
                                 <td>You need to deposit payment no. 2 of <strong>1500</strong>.</td>
                                 <td>
-                                    <a href="#" className="btn btn-primary">
-                                        <i className="fas fa-money-bill-wave"></i> Deposit
+                                    <a href="#" className="btn btn-primary btn-sm mx-2">
+                                        <i className="fas fa-money-bill-wave"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -164,9 +164,9 @@
                     <table className="table">
                         <thead>
                             <tr>
-                                <th>Contract</th>
-                                <th>Message</th>
-                                <th>Actions</th>
+                                <th><i className="fas fa-file-contract"></i></th>
+                                <th><i className="fas fa-envelope"></i></th>
+                                <th><i className="fas fa-cogs"></i></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -174,8 +174,8 @@
                                 <td>Project House</td>
                                 <td>You have earned a reward of <strong>100</strong> for delivering the house foundations.</td>
                                 <td>
-                                    <a href="#" className="btn btn-primary">
-                                        <i className="fas fa-gift"></i> Redeem
+                                    <a href="#" className="btn btn-primary btn-sm mx-2">
+                                        <i className="fas fa-gift"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -191,10 +191,10 @@
                     <table className="table">
                         <thead>
                             <tr>
-                                <th>Contract</th>
-                                <th>Message</th>
-                                <th>Consequences</th>
-                                <th>Actions</th>
+                                <th><i className="fas fa-file-contract"></i></th>
+                                <th><i className="fas fa-envelope"></i></th>
+                                <th><i className="fas fa-balance-scale"></i></th>
+                                <th><i className="fas fa-cogs"></i></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -203,8 +203,8 @@
                                 <td>Fred has not delivered the ordered windows on time.</td>
                                 <td>You earn a reward of <strong>100</strong> as compensation.</td>
                                 <td>
-                                    <a href="#" className="btn btn-danger">
-                                        <i className="fas fa-flag"></i> Report
+                                    <a href="#" className="btn btn-danger btn-sm mx-2">
+                                        <i className="fas fa-flag"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -218,7 +218,7 @@
             return (
                 <div>
                     <ConnectionIndicator />
-                    <div className="container mt-3">
+                    <div className="container-fluid mt-3">
                         <div className="row">
                             <div className="col-12">
                                 <CreateContractButton />
@@ -256,7 +256,7 @@
                                     <TasksContent />
                                 </ContractCard>
                             </div>
-                            <div className="col-md-12">
+                            <div className="col-lg-6 col-md-12">
                                 <ContractCard
                                     title="Rewards"
                                     icon="fas fa-gift"

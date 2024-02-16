@@ -1,0 +1,13 @@
+{
+    "name": "@degenhack/root",
+    "version": "0.0.1",
+    "private": true,
+    "workspaces": [
+        "packages/*",
+        "ux/"
+    ],
+    "scripts": {
+        "ux:start": "npm run -w @degenhack/ux start",
+        "ux:deploy": "npm run -w @degenhack/ux deploy"
+    }
+}
