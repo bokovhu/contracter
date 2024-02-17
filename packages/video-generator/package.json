@@ -1,0 +1,9 @@
+{
+    "name": "@degenhack/video-generator",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "python3 main.py",
+        "deps": "pip3 install -r requirements.txt"
+    }
+}
