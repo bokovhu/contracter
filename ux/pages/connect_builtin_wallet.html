@@ -34,14 +34,44 @@
 </head>
 
 <body>
-    <div id="root"></div>
+    <div id="root">
+        Loading...
+    </div>
     <script src="https://unpkg.com/bootstrap@5.3.2/dist/js/bootstrap.bundle.js"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="../dist/connect_wallet.js"></script>
     <script type="text/babel">
         /* Define the <App /> component globally, to be rendered using createRoot(...).render(<App />) */
         window.App = () => {
+
+            let [json, setJson] = React.useState(null);
+
+            const onFileChange = async (event) => {
+                const file = event.target.files[0];
+                console.log(file);
+                setJson(await file.text());
+            }
+
+            const uploadTestContract = React.useCallback(
+                async () => {
+                    const wsProvider = new WsProvider('wss://rococo-contracts-rpc.polkadot.io');
+                    const api = await ApiPromise.create({ provider: wsProvider });
+
+                    const accounts = await web3Accounts();
+                    console.log("Web3 accounts: ", accounts);
+                    const account = accounts[0];
+                    const transfer = await api.call.contractsApi.uploadCode(
+                        account.address,
+                        json.toString(),
+                        0
+                    )
+                    console.log(transfer)
+                },
+                [json]
+            )
+
             return (
                 <div className="card text-center">
                     <div className="card-body">
@@ -50,6 +80,8 @@
                         <p className="card-text">
                             <a href="/" className="btn btn-primary" role="button">Use another authentication option</a>
                         </p>
+                        <input type="file" onChange={onFileChange} />
+                        <input type="button" onClick={uploadTestContract} value="Submit" />
                     </div>
                 </div>
             );
@@ -58,8 +90,31 @@
     <script type="text/babel">
         const { createRoot } = ReactDOM;
         const App = window.App;
-        const root = createRoot(document.getElementById('root'));
-        root.render(<App />);
+        const { web3Accounts, web3Enable, web3FromSource } = window.dapp_extension
+        const { ApiPromise, WsProvider } = window.polkadot_api
+
+        async function login() {
+
+            const enable = await web3Enable('contracter');
+            console.log("Web3 enable: ", enable);
+
+            // Construct
+            const wsProvider = new WsProvider('wss://rococo-contracts-rpc.polkadot.io');
+            const api = await ApiPromise.create({ provider: wsProvider });
+
+            // Do something
+            console.log(api.genesisHash.toHex());
+            console.log(api.call.contractsApi);
+        }
+
+        login()
+            .then(
+            () => {
+                const root = createRoot(document.getElementById('root'));
+                root.render(<App />);
+            }
+        )
+
     </script>
 </body>
 
