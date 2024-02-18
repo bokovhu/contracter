@@ -4,7 +4,7 @@
 
 _Contracter is a web3 application, that allows users to create contracts using a simple user interface, and interact with them as well. The created contracts may support many interesting financial features, such as requiring a deposit, or sending a reward to someone._
 
-* [YouTube Video](#)
+* [YouTube Video](https://www.youtube.com/watch?v=KUHTHg-tN9Y)
 * [Live Demo](https://contracter-degenhack-2024-ux.surge.sh)
 
 # Screenshots
