@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Demo</title>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .fullscreen-center {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/bootstrap@5.3.2/dist/js/bootstrap.bundle.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script src="/scripts/lib-web3-init.js"></script>
+    <script src="/scripts/lib-contract-deployer.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const ErrorCard = ({ message }) => (
+            <div className="card text-white bg-danger">
+                <div className="card-body text-center">
+                    <h5 className="card-title">Error</h5>
+                    <p className="card-text">{message}</p>
+                    <p className="card-text">
+                        <a href="/pages/landing_page.html">Back ...</a>
+                    </p>
+                </div>
+            </div>
+        );
+
+        const SuccessCard = ({ message }) => (
+            <div className="card text-white bg-success">
+                <div className="card-body text-center">
+                    <h5 className="card-title">Success</h5>
+                    <p className="card-text">{message}</p>
+                </div>
+            </div>
+        );
+
+        const DeployContractPage = () => {
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(null);
+            const [success, setSuccess] = useState(false);
+            const [contractAddr, setContractAddr] = useState(null);
+
+            useEffect(() => {
+                const deployContractBundle = localStorage.getItem('contracter.deployContractBundle');
+                if (!deployContractBundle) {
+                    setError('No contract bundle found.');
+                    setLoading(false);
+                    return;
+                }
+                console.log(deployContractBundle);
+
+                try {
+                    const jsonData = JSON.parse(deployContractBundle);
+                    window.DegenContractDeployer.deployContract(jsonData)
+                        .then((addr) => {
+                            setContractAddr(addr);
+                            setSuccess(true);
+                            setTimeout(() => {
+                                window.location.href = '/pages/landing_page.html';
+                            }, 5000);
+                        })
+                        .catch((error) => {
+                            setError('Deployment failed: ' + error.message);
+                        })
+                        .finally(() => setLoading(false));
+                } catch (error) {
+                    setError('Error parsing contract bundle: ' + error.message);
+                    setLoading(false);
+                }
+            }, []);
+
+            if (loading) {
+                return <div className="fullscreen-center">Loading...</div>;
+            }
+
+            if (error) {
+                return <div className="fullscreen-center"><ErrorCard message={error} /></div>;
+            }
+
+            if (success) {
+                return <div className="fullscreen-center"><SuccessCard message={`Contract deployed at: ${contractAddr}`} /></div>;
+            }
+
+            return null;
+        };
+
+        DegenWeb3Init.runWithWeb3(
+            () => {
+                ReactDOM.render(<DeployContractPage />, document.getElementById('root'));
+            },
+            () => {
+                window.location.href = '/index.html';
+            }
+        );
+    </script>
+</body>
+
+</html>

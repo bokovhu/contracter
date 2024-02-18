@@ -13,6 +13,14 @@ _Contracter is a web3 application, that allows users to create contracts using a
 
 ![the contract editor](screenshots/contract-editor.png)
 
+![build & deploy contract](screenshots/build-deploy.png)
+
+![build was successful](screenshots/build-successful.png)
+
+![deploy contract](screenshots/deploy-contract.png)
+
+![success deploying contract](screenshots/success-deploy.png)
+
 ![the contact book](screenshots/contact-book.png)
 
 ![the login screen](screenshots/login.png)

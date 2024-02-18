@@ -22,7 +22,7 @@ WORKDIR /app
 COPY server.js /app
 COPY package.json /app
 COPY package-lock.json /app
-COPY template /app/template
+COPY template /template
 
 RUN npm install
 
