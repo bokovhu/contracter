@@ -7,6 +7,6 @@
     },
     "scripts": {
         "start": "node copy_scripts.js && http-server -p 8180",
-        "deploy": "surge . contracter-degenhack-2024-ux.surge.sh"
+        "deploy": "surge . contracter-degenhack-2024-ux-v2.surge.sh"
     }
 }
