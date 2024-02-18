@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="PROJECT" libraries="{@babel/standalone, @polkadot/api, @polkadot/api-contract, @polkadot/extension-dapp, @polkadot/util, @polkadot/util-crypto, bootstrap, react, react-dom}" />
+  </component>
+</project>
