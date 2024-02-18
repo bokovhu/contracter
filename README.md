@@ -42,3 +42,17 @@ To recompile the IIFE libraries, run `npm run -w @degenhack/lib-contact-book bui
 To serve the UX prototype, run `npm run -w @degenhack/ux start`
 
 To build the contracter-builder, run `docker build -t contracter-builder:latest -f ContracterBuilder.Dockerfile contracter-builder/`
+
+To run the contracter-builder, you are supposed to send a `POST` request to `/build/{projectname}`. In the POST request body, send the ink! Rust code of the `lib.rs` of your contract. You will receive the built `.contract` JSON file contents.
+
+# Completion Status
+
+* UX prototype
+    * Shows what authentication options are available
+    * Shows how the landing page should work
+    * Partially implemented contract editor UI behaviour
+    * UX proof-of-concept for showing how build - deploy phase works
+* Actually working login using Polkadot.JS
+* Actually working contract deployment page, deploys a flipper contract
+* Actually working contract builder backend service
+* Some amount of documentation
