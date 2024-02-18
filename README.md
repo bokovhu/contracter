@@ -8,6 +8,10 @@ _Contracter is a web3 application, that allows users to create contracts using a
 
 * [YouTube Video](https://www.youtube.com/watch?v=KUHTHg-tN9Y)
 * [Live Demo](https://contracter-degenhack-2024-ux.surge.sh)
+* Some of our ChatGPT conversations ...
+    * [UX Prototyping](https://chat.openai.com/share/cdaa828f-9b02-4878-ae4e-565ea5f53591)
+    * [Video AI Scripts via GPT-4](https://chat.openai.com/share/5c0e1b77-08a0-4565-adcb-136df9838251)
+    * [Contract Editor Refactor via GPT-4](https://chat.openai.com/share/cc3004dd-5c4b-44da-868c-ac8b0dff0fbe)
 
 # Screenshots
 
