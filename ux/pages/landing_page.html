@@ -16,7 +16,13 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script src="/scripts/lib-contact-book.js"></script>
+    <script src="/scripts/lib-web3-init.js"></script>
+
     <script type="text/babel">
+        const { runWithWeb3 } = DegenWeb3Init;
+
         const ConnectionIndicator = () => {
             return (
                 <nav className="navbar navbar-dark bg-dark">
@@ -284,9 +290,17 @@
             );
         };
 
-        const { createRoot } = ReactDOM;
-        const root = createRoot(document.getElementById('root'));
-        root.render(<App />);
+        runWithWeb3(
+            () => {
+                
+                const { createRoot } = ReactDOM;
+                const root = createRoot(document.getElementById('root'));
+                root.render(<App />);
+                
+            },
+            () => window.location.href = "/"
+        );
+
     </script>
 </body>
 

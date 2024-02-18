@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Project Contract</title>
+    <title>Project Contract Editor</title>
     <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,158 +15,213 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <script src="/scripts/lib-contact-book.js"></script>
+    <script src="/scripts/lib-web3-init.js"></script>
+
     <script type="text/babel">
-        /* Define the <App /> component globally, to be rendered using createRoot(...).render(<App />) */
-        window.App = () => {
-            const contractData = {
-                title: "Project Contract",
-                members: [
-                    { name: "Alice", address: "123456abcd" },
-                    { name: "Bob", address: "abcd123" }
-                ],
-                clauses: [
-                    {
-                        title: "Alice deposits payment, and Bob accepts the job",
-                        steps: [
-                            { type: "deposit", source: "Alice", value: 100 }
-                        ]
-                    },
-                    {
-                        title: "Bob delivers the software, and Alice tests it",
-                        steps: [
-                            { type: "deliver", source: "Bob", target: "Alice" },
-                            { type: "test", source: "Alice" }
-                        ]
-                    },
-                    {
-                        title: "Bob is rewarded for his work",
-                        steps: [
-                            { type: "reward", target: "Bob", value: 100 }
-                        ]
-                    }
-                ]
-            };
 
-            return (
-                <div>
-                    <ConnectionIndicator />
-                    <ContractEditorModel contractData={contractData} />
-                </div>
-            );
-        };
-
-        const ConnectionIndicator = () => {
-            return (
-                <nav className="navbar navbar-dark bg-dark">
-                    <div className="container-fluid">
-                        <span className="navbar-brand">Status: Connected</span>
-                        <i className="fas fa-wifi"></i>
-                    </div>
-                </nav>
-            );
-        };
-
-        const Clause = ({ title, steps }) => {
-            return (
-                <div className="card mb-3">
-                    <div className="card-header d-flex justify-content-between align-items-center">
-                        <span>{title}</span>
-                        <button type="button" className="btn btn-link">
-                            <i className="fas fa-pencil-alt"></i>
-                        </button>
-                    </div>
-                    <div className="card-body">
-                        {steps && steps.length > 0 ? (
-                            <ul className="list-group list-group-flush">
-                                {steps.map((step, index) => (
-                                    <li key={index} className="list-group-item">
-                                        <span className="badge bg-secondary me-2">
-                                            <i className={getTypeIcon(step.type)}></i>
-                                            {step.type.toUpperCase()}
-                                        </span>
-                                        {step.source && (
-                                            <span className="badge bg-primary me-2">Source: {step.source}</span>
-                                        )}
-                                        {step.target && (
-                                            <span className="badge bg-info me-2">Target: {step.target}</span>
-                                        )}
-                                        {step.value && (
-                                            <span className="badge bg-success">Value: {step.value}</span>
-                                        )}
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>No steps provided</p>
-                        )}
-                    </div>
-                </div>
-            );
-        };
-
-        const getTypeIcon = (type) => {
-            switch (type) {
-                case "deposit":
-                    return "fas fa-coins";
-                case "deliver":
-                    return "fas fa-truck";
-                case "test":
-                    return "fas fa-check";
-                case "reward":
-                    return "fas fa-gift";
-                default:
-                    return "fas fa-question";
-            }
-        };
-
-        const Member = ({ name, address }) => {
-            return (
-                <div className="card mb-3">
-                    <div className="card-header">
-                        <h5 className="card-title">{name}</h5>
-                    </div>
-                    <div className="card-body">
-                        <p className="card-text">Address: {address}</p>
-                    </div>
-                </div>
-            );
-        };
-
-        class ContractEditorModel extends React.Component {
+        class ContractEditor extends React.Component {
             constructor(props) {
                 super(props);
                 this.state = {
-                    contractData: props.contractData
+                    contract: JSON.parse(localStorage.getItem('contracter.contractEditorContract')) || {
+                        title: '',
+                        paragraphs: []
+                    }
                 };
             }
 
-            render() {
-                const { title, members, clauses } = this.state.contractData;
+            handleTitleChange = (event) => {
+                this.setState({
+                    contract: {
+                        ...this.state.contract,
+                        title: event.target.value
+                    }
+                });
+            };
+
+            handleParagraphTitleChange = (index, event) => {
+                const paragraphs = [...this.state.contract.paragraphs];
+                paragraphs[index].title = event.target.value;
+                this.setState({
+                    contract: {
+                        ...this.state.contract,
+                        paragraphs
+                    }
+                });
+            };
+
+            handleProvisionChange = (paragraphIndex, provisionIndex, field, value) => {
+                const paragraphs = [...this.state.contract.paragraphs];
+                paragraphs[paragraphIndex].provisions[provisionIndex].payload[field] = value;
+                this.setState({
+                    contract: {
+                        ...this.state.contract,
+                        paragraphs
+                    }
+                });
+            };
+
+            addParagraph = () => {
+                this.setState({
+                    contract: {
+                        ...this.state.contract,
+                        paragraphs: [
+                            ...this.state.contract.paragraphs,
+                            {
+                                title: '',
+                                provisions: []
+                            }
+                        ]
+                    }
+                });
+            };
+
+            addProvision = (paragraphIndex, type) => {
+                const paragraphs = [...this.state.contract.paragraphs];
+                const newProvision = {
+                    type: type,
+                    payload: {
+                        notes: ''
+                    }
+                };
+                if (type === 'REQUIRE_DEPOSIT' || type === 'CREATE_REWARD') {
+                    newProvision.payload.amount = 0;
+                }
+                if (type === 'REQUIRE_DEPOSIT' || type === 'REQUIRE_SIGNATURE') {
+                    newProvision.payload.signer = '';
+                }
+                paragraphs[paragraphIndex].provisions.push(newProvision);
+                this.setState({
+                    contract: {
+                        ...this.state.contract,
+                        paragraphs
+                    }
+                });
+            };
+
+            saveContract = () => {
+                localStorage.setItem('contracter.contractEditorContract', JSON.stringify(this.state.contract));
+                alert('Contract saved!');
+            };
+
+            renderProvisionInput = (provision, paragraphIndex, provisionIndex) => {
+                switch (provision.type) {
+                    case 'REQUIRE_DEPOSIT':
+                        return (
+                            <>
+                                <input
+                                    type="text"
+                                    className="form-control mb-2"
+                                    value={provision.payload.depositor}
+                                    onChange={(e) => this.handleProvisionChange(paragraphIndex, provisionIndex, 'depositor', e.target.value)}
+                                    placeholder="Depositor"
+                                />
+                                <input
+                                    type="number"
+                                    className="form-control mb-2"
+                                    value={provision.payload.amount}
+                                    onChange={(e) => this.handleProvisionChange(paragraphIndex, provisionIndex, 'amount', e.target.value)}
+                                    placeholder="Amount"
+                                />
+                                <input
+                                    type="text"
+                                    className="form-control mb-2"
+                                    value={provision.payload.notes}
+                                    onChange={(e) => this.handleProvisionChange(paragraphIndex, provisionIndex, 'notes', e.target.value)}
+                                    placeholder="Notes"
+                                />
+                            </>
+                        );
+                    case 'REQUIRE_SIGNATURE':
+                        return (
+                            <>
+                                <input
+                                    type="text"
+                                    className="form-control mb-2"
+                                    value={provision.payload.signer}
+                                    onChange={(e) => this.handleProvisionChange(paragraphIndex, provisionIndex, 'signer', e.target.value)}
+                                    placeholder="Signer"
+                                />
+                                <input
+                                    type="text"
+                                    className="form-control mb-2"
+                                    value={provision.payload.notes}
+                                    onChange={(e) => this.handleProvisionChange(paragraphIndex, provisionIndex, 'notes', e.target.value)}
+                                    placeholder="Notes"
+                                />
+                            </>
+                        );
+                    case 'CREATE_REWARD':
+                        return (
+                            <>
+                                <input
+                                    type="number"
+                                    className="form-control mb-2"
+                                    value={provision.payload.reward}
+                                    onChange={(e) => this.handleProvisionChange(paragraphIndex, provisionIndex, 'reward', e.target.value)}
+                                    placeholder="Reward"
+                                />
+                                <input
+                                    type="text"
+                                    className="form-control mb-2"
+                                    value={provision.payload.notes}
+                                    onChange={(e) => this.handleProvisionChange(paragraphIndex, provisionIndex, 'notes', e.target.value)}
+                                    placeholder="Notes"
+                                />
+                            </>
+                        );
+                    default:
+                        return null;
+                }
+            };
+
+            renderParagraph = (paragraph, index) => {
                 return (
-                    <div className="container">
-                        <h1 className="mt-3 mb-4">{title}</h1>
-                        <h2>Members:</h2>
-                        <div className="row">
-                            {members.map((member, index) => (
-                                <div key={index} className="col-md-6">
-                                    <Member name={member.name} address={member.address} />
-                                </div>
-                            ))}
+                    <div key={index} className="card mb-3">
+                        <div className="card-header">
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={paragraph.title}
+                                onChange={(e) => this.handleParagraphTitleChange(index, e)}
+                                placeholder="Paragraph Title"
+                            />
                         </div>
-                        <h2>Clauses:</h2>
-                        {clauses.map((clause, index) => (
-                            <Clause key={index} title={clause.title} steps={clause.steps} />
-                        ))}
+                        <div className="card-body">
+                            {paragraph.provisions.map((provision, provisionIndex) =>
+                                this.renderProvisionInput(provision, index, provisionIndex)
+                            )}
+                            <button className="btn btn-outline-primary mt-2" onClick={() => this.addProvision(index, 'REQUIRE_DEPOSIT')}>Add Require Deposit</button>
+                            <button className="btn btn-outline-secondary mt-2 ms-2" onClick={() => this.addProvision(index, 'REQUIRE_SIGNATURE')}>Add Require Signature</button>
+                            <button className="btn btn-outline-success mt-2 ms-2" onClick={() => this.addProvision(index, 'CREATE_REWARD')}>Add Create Reward</button>
+                        </div>
+                    </div>
+                );
+            };
+
+            render() {
+                return (
+                    <div className="container my-4">
+                        <h2>Contract Editor</h2>
+                        <input
+                            type="text"
+                            className="form-control mb-3"
+                            value={this.state.contract.title}
+                            onChange={this.handleTitleChange}
+                            placeholder="Contract Title"
+                        />
+                        {this.state.contract.paragraphs.map(this.renderParagraph)}
+                        <button className="btn btn-primary" onClick={this.addParagraph}>Add Paragraph</button>
+                        <button className="btn btn-success float-end" onClick={this.saveContract}>Save Contract</button>
                     </div>
                 );
             }
         }
-    </script>
-    <script type="text/babel">
-        const { createRoot } = ReactDOM;
-        const App = window.App;
-        const root = createRoot(document.getElementById('root'));
-        root.render(<App />);
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<ContractEditor />);
     </script>
 </body>
 

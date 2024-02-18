@@ -6,7 +6,7 @@
         "http-server": "14.1.1"
     },
     "scripts": {
-        "start": "http-server -p 8180",
+        "start": "node copy_scripts.js && http-server -p 8180",
         "deploy": "surge . contracter-degenhack-2024-ux.surge.sh"
     }
 }

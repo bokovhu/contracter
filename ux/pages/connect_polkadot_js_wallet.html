@@ -9,7 +9,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            background-color: #dc3545; /* Red color as danger background */
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -18,17 +17,20 @@
 
         .card {
             width: 400px;
-            background-color: #fff; /* White background for the card */
+            background-color: #fff;
+            /* White background for the card */
             padding: 20px;
             border-radius: 10px;
         }
 
         .fa-exclamation-circle {
-            color: #dc3545; /* Red color for the exclamation circle icon */
+            color: #dc3545;
+            /* Red color for the exclamation circle icon */
         }
 
         .btn-link {
-            color: #fff; /* White color for the link text */
+            color: #fff;
+            /* White color for the link text */
         }
     </style>
 </head>
@@ -39,16 +41,79 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script src="/scripts/lib-web3-init.js"></script>
+
     <script type="text/babel">
         /* Define the <App /> component globally, to be rendered using createRoot(...).render(<App />) */
+        const { accounts, networks } = DegenWeb3Init;
+        const {
+            useState,
+            useEffect
+        } = React;
+
         window.App = () => {
+
+            const [selectableAccounts, setSelectableAccounts] = useState([]);
+            const [selectedAccount, setSelectedAccount] = useState(null);
+            const [selectableNetworks, setSelectableNetworks] = useState([]);
+            const [selectedNetwork, setSelectedNetwork] = useState(null);
+
+            useEffect(
+                () => {
+                    const accs = accounts();
+                    const nets = networks();
+                    setSelectableAccounts(accs);
+                    setSelectedAccount(accs[0].address);
+                    setSelectableNetworks(nets);
+                    setSelectedNetwork(nets[0].url);
+                },
+                []
+            );
+
+            const onDoSelect = () => {
+                const ev = new CustomEvent('degen-account-selected', {
+                    detail: {
+                        address: selectedAccount,
+                        network: selectedNetwork
+                    }
+                });
+                document.dispatchEvent(ev);
+            };
+
             return (
                 <div className="card text-center">
                     <div className="card-body">
-                        <i className="fas fa-exclamation-circle fa-3x mb-3"></i>
-                        <h5 className="card-title">Sorry, Polkadot.JS wallet is not supported at the moment</h5>
+                        <div className="mb-3">
+                            <h2 className="card-title">Connect Polkadot.js Wallet</h2>
+                        </div>
+
+                        <div className="mb-3">
+                            <select className="form-select" onChange={(ev) => setSelectedNetwork(ev.target.value)}>
+                                {selectableNetworks.map(
+                                    (net) => (
+                                        <option key={net.url} value={net.url}>{net.name}</option>
+                                    )
+                                )}
+                            </select>
+                        </div>
+
+                        <div className="mb-3">
+                            <select className="form-select" onChange={(ev) => setSelectedAccount(ev.target.value)}>
+                                {selectableAccounts.map(
+                                    (acc) => (
+                                        <option key={acc.address} value={acc.address}>{acc.meta.name}</option>
+                                    )
+                                )}
+                            </select>
+                        </div>
+
                         <p className="card-text">
-                            <a href="/" className="btn btn-primary" role="button">Use another authentication option</a>
+                            <button className="btn btn-primary" onClick={onDoSelect}>Connect</button>
+                        </p>
+
+                        <p className="card-text">
+                            <a href="/" role="button">Use another authentication option</a>
                         </p>
                     </div>
                 </div>
@@ -57,9 +122,39 @@
     </script>
     <script type="text/babel">
         const { createRoot } = ReactDOM;
-        const App = window.App;
-        const root = createRoot(document.getElementById('root'));
-        root.render(<App />);
+        const { runWithWeb3 } = DegenWeb3Init;
+
+        runWithWeb3(
+            () => {
+                window.location.href = '/pages/landing_page.html';
+            },
+            async () => {
+
+                const App = window.App;
+                const root = createRoot(document.getElementById('root'));
+                root.render(<App />);
+
+                return new Promise(
+                    (resolve, reject) => {
+                        document.addEventListener('degen-account-selected', (ev) => {
+                            localStorage.setItem('contracter.auth', JSON.stringify({
+                                walletType: 'polkadot-js',
+                                address: ev.detail.address,
+                                network: ev.detail.network
+                            }));
+
+                            resolve(ev.detail);
+                        });
+
+                        setTimeout(() => {
+                            reject('No account selected');
+                        }, 600000);
+                    }
+                );
+
+            }
+        )
+
     </script>
 </body>
 

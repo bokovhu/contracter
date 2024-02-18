@@ -1,0 +1,19 @@
+{
+    "name": "@degenhack/lib-contract-deployer",
+    "version": "0.0.1",
+    "private": true,
+    "main": "src/index.ts",
+    "dependencies": {
+        "@degenhack/contract-model": "*",
+        "@polkadot/extension-dapp": "*",
+        "@polkadot/api": "*",
+        "@polkadot/ui-keyring": "*",
+        "@polkadot/api-contract": "*"
+    },
+    "devDependencies": {
+        "esbuild": "*"
+    },
+    "scripts": {
+        "build": "esbuild src/index.ts --format=iife --bundle --minify --sourcemap --platform=browser --outfile=index.js --global-name=DegenContractDeployer"
+    }
+}

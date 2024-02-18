@@ -6,6 +6,16 @@
         "packages/*",
         "ux/"
     ],
+    "devDependencies": {
+        "esbuild": "0.20.0",
+        "typescript": "5.3.3"
+    },
+    "dependencies": {
+        "@polkadot/extension-dapp": "0.46.6",
+        "@polkadot/api": "10.11.2",
+        "@polkadot/ui-keyring": "3.6.4",
+        "@polkadot/api-contract": "10.11.2"
+    },
     "scripts": {
         "ux:start": "npm run -w @degenhack/ux start",
         "ux:deploy": "npm run -w @degenhack/ux deploy"
