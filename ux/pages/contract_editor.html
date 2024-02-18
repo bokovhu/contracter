@@ -18,6 +18,7 @@
 
     <script src="/scripts/lib-contact-book.js"></script>
     <script src="/scripts/lib-web3-init.js"></script>
+    <script src="/scripts/lib-code-generator.js"></script>
 
     <script type="text/babel">
 
@@ -98,7 +99,8 @@
                             ...this.state.contract.paragraphs,
                             {
                                 title: '',
-                                provisions: []
+                                provisions: [],
+                                index: this.state.contract.paragraphs.length
                             }
                         ]
                     }
@@ -138,6 +140,7 @@
 
             saveContract = () => {
                 localStorage.setItem('contracter.contractEditorContract', JSON.stringify(this.state.contract));
+                localStorage.setItem('contracter.generatedCode', window.DegenCodeGenerator.generateCode(this.state.contract));
                 alert('Contract saved!');
             };
 

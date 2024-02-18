@@ -22,3 +22,4 @@ copyScript('lib-contract-registry', "lib-contract-registry.js");
 copyScript('lib-contract-deployer', "lib-contract-deployer.js");
 copyScript('lib-web3-init', "lib-web3-init.js");
 copyScript('lib-contract-editor', "lib-contract-editor.js");
+copyScript('lib-code-generator', "lib-code-generator.js");

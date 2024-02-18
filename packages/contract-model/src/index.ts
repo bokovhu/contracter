@@ -20,6 +20,7 @@ export type AppContractRequireSignatureProvisionPayload = {
 }
 
 export type AppContractCreateRewardProvisionPayload = {
+    beneficiary: string;
     reward: number;
     notes: string;
 }
