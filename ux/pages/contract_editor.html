@@ -15,7 +15,7 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
+
     <script src="/scripts/lib-contact-book.js"></script>
     <script src="/scripts/lib-web3-init.js"></script>
 
@@ -27,9 +27,17 @@
                 this.state = {
                     contract: JSON.parse(localStorage.getItem('contracter.contractEditorContract')) || {
                         title: '',
+                        members: [],
                         paragraphs: []
-                    }
+                    },
+                    contacts: []
                 };
+            }
+
+            componentDidMount() {
+                window.DegenContactBook.listContacts().then(contacts => {
+                    this.setState({ contacts });
+                });
             }
 
             handleTitleChange = (event) => {
@@ -37,6 +45,25 @@
                     contract: {
                         ...this.state.contract,
                         title: event.target.value
+                    }
+                });
+            };
+
+            handleMemberChange = (event) => {
+                this.setState({
+                    contract: {
+                        ...this.state.contract,
+                        members: [...this.state.contract.members, this.state.contacts.find(contact => contact.address === event.target.value)]
+                    }
+                });
+            };
+
+            deleteMember = (memberIndex) => {
+                const members = this.state.contract.members.filter((_, index) => index !== memberIndex);
+                this.setState({
+                    contract: {
+                        ...this.state.contract,
+                        members
                     }
                 });
             };
@@ -89,9 +116,17 @@
                 if (type === 'REQUIRE_DEPOSIT' || type === 'CREATE_REWARD') {
                     newProvision.payload.amount = 0;
                 }
-                if (type === 'REQUIRE_DEPOSIT' || type === 'REQUIRE_SIGNATURE') {
+                if (type === 'REQUIRE_SIGNATURE') {
                     newProvision.payload.signer = '';
                 }
+                if (type === 'REQUIRE_DEPOSIT') {
+                    newProvision.payload.depositor = '';
+                }
+                if (type === 'CREATE_REWARD') {
+                    newProvision.payload.beneficiary = '';
+                    newProvision.payload.reward = 0;
+                }
+
                 paragraphs[paragraphIndex].provisions.push(newProvision);
                 this.setState({
                     contract: {
@@ -107,17 +142,21 @@
             };
 
             renderProvisionInput = (provision, paragraphIndex, provisionIndex) => {
+                const memberOptions = this.state.contract.members.map(member => (
+                    <option key={member.address} value={member.address}>{member.name}</option>
+                ));
                 switch (provision.type) {
                     case 'REQUIRE_DEPOSIT':
                         return (
                             <>
-                                <input
-                                    type="text"
-                                    className="form-control mb-2"
+                                <select
+                                    className="form-select mb-2"
                                     value={provision.payload.depositor}
                                     onChange={(e) => this.handleProvisionChange(paragraphIndex, provisionIndex, 'depositor', e.target.value)}
-                                    placeholder="Depositor"
-                                />
+                                >
+                                    <option value="">Select Depositor</option>
+                                    {memberOptions}
+                                </select>
                                 <input
                                     type="number"
                                     className="form-control mb-2"
@@ -137,13 +176,14 @@
                     case 'REQUIRE_SIGNATURE':
                         return (
                             <>
-                                <input
-                                    type="text"
-                                    className="form-control mb-2"
+                                <select
+                                    className="form-select mb-2"
                                     value={provision.payload.signer}
                                     onChange={(e) => this.handleProvisionChange(paragraphIndex, provisionIndex, 'signer', e.target.value)}
-                                    placeholder="Signer"
-                                />
+                                >
+                                    <option value="">Select Signer</option>
+                                    {memberOptions}
+                                </select>
                                 <input
                                     type="text"
                                     className="form-control mb-2"
@@ -156,6 +196,14 @@
                     case 'CREATE_REWARD':
                         return (
                             <>
+                                <select
+                                    className="form-select mb-2"
+                                    value={provision.payload.beneficiary}
+                                    onChange={(e) => this.handleProvisionChange(paragraphIndex, provisionIndex, 'beneficiary', e.target.value)}
+                                >
+                                    <option value="">Select Beneficiary</option>
+                                    {memberOptions}
+                                </select>
                                 <input
                                     type="number"
                                     className="form-control mb-2"
@@ -193,10 +241,49 @@
                             {paragraph.provisions.map((provision, provisionIndex) =>
                                 this.renderProvisionInput(provision, index, provisionIndex)
                             )}
-                            <button className="btn btn-outline-primary mt-2" onClick={() => this.addProvision(index, 'REQUIRE_DEPOSIT')}>Add Require Deposit</button>
-                            <button className="btn btn-outline-secondary mt-2 ms-2" onClick={() => this.addProvision(index, 'REQUIRE_SIGNATURE')}>Add Require Signature</button>
-                            <button className="btn btn-outline-success mt-2 ms-2" onClick={() => this.addProvision(index, 'CREATE_REWARD')}>Add Create Reward</button>
+                            <div className="mt-2">
+                                <button className="btn btn-outline-primary" onClick={() => this.addProvision(index, 'REQUIRE_DEPOSIT')}>Add Require Deposit</button>
+                                <button className="btn btn-outline-secondary ms-2" onClick={() => this.addProvision(index, 'REQUIRE_SIGNATURE')}>Add Require Signature</button>
+                                <button className="btn btn-outline-success ms-2" onClick={() => this.addProvision(index, 'CREATE_REWARD')}>Add Create Reward</button>
+                            </div>
                         </div>
+                    </div>
+                );
+            };
+
+            renderMembers = () => {
+                const contactOptions = this.state.contacts.map(contact => (
+                    <option key={contact.address} value={contact.address}>{contact.name}</option>
+                ));
+                return (
+                    <div className="mb-3">
+                        <h3>Members</h3>
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.state.contract.members.map((member, index) => (
+                                    <tr key={member.address}>
+                                        <td>{member.name}</td>
+                                        <td>{member.address}</td>
+                                        <td>
+                                            <button className="btn btn-danger btn-sm" onClick={() => this.deleteMember(index)}>
+                                                <i className="fas fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        <select className="form-select" onChange={this.handleMemberChange}>
+                            <option value="">Add Member</option>
+                            {contactOptions}
+                        </select>
                     </div>
                 );
             };
@@ -204,7 +291,10 @@
             render() {
                 return (
                     <div className="container my-4">
-                        <h2>Contract Editor</h2>
+                        <h1 className="mb-4">Contract Editor</h1>
+                        <div className="mb-4">
+                            <a href="/pages/landing_page.html" role="button">Back ...</a>
+                        </div>
                         <input
                             type="text"
                             className="form-control mb-3"
@@ -212,6 +302,7 @@
                             onChange={this.handleTitleChange}
                             placeholder="Contract Title"
                         />
+                        {this.renderMembers()}
                         {this.state.contract.paragraphs.map(this.renderParagraph)}
                         <button className="btn btn-primary" onClick={this.addParagraph}>Add Paragraph</button>
                         <button className="btn btn-success float-end" onClick={this.saveContract}>Save Contract</button>

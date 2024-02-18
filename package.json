@@ -4,7 +4,8 @@
     "private": true,
     "workspaces": [
         "packages/*",
-        "ux/"
+        "ux/",
+        "contracter-builder/"
     ],
     "devDependencies": {
         "esbuild": "0.20.0",

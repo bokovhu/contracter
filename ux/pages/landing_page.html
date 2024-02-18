@@ -42,6 +42,14 @@
             );
         };
 
+        const ContactBookButton = () => {
+            return (
+                <a className="btn btn-primary mt-3 w-100" href="/pages/contact_book.html">
+                    <i className="fas fa-address-book me-2"></i> Contact Book
+                </a>
+            );
+        };
+
         const ContractCard = ({ title, icon, number, actionText, actionIcon, children }) => {
             return (
                 <div className="card m-2">
@@ -229,6 +237,11 @@
                             <div className="col-12">
                                 <CreateContractButton />
                             </div>
+
+                            <div className="col-12">
+                                <ContactBookButton />
+                            </div>
+                            
                             <div className="col-lg-6 col-md-12">
                                 <ContractCard
                                     title="Draft Contracts"
