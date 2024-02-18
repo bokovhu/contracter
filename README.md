@@ -1,5 +1,7 @@
 # Contracter
 
+**⚠️ WARNING: We have made modifications to the source code after the submission deadline (2024-02-18 14:00 CET). These modifications include making things nicer, better documented, and implementing missing features. The original submitted commit hash was [0ed1163](https://github.com/bokovhu/contracter/tree/0ed1163f53156dfd11fb6a454d0389c4ba4bb28f), click it to go back to the original submission source code state.**
+
 ![logo image](./logo.png)
 
 _Contracter is a web3 application, that allows users to create contracts using a simple user interface, and interact with them as well. The created contracts may support many interesting financial features, such as requiring a deposit, or sending a reward to someone._
