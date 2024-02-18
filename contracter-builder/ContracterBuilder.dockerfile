@@ -1,7 +1,7 @@
 FROM rust:latest
 
 RUN apt update
-RUN apt install nodejs npm build-essential git clang curl libssl-dev llvm libudev-dev make protobuf-compiler -y --fix-missing
+RUN apt install -y git clang curl libssl-dev libudev-dev make protobuf-compiler -y --fix-missing
 
 RUN curl -L https://github.com/paritytech/substrate-contracts-node/releases/download/v0.35.0/substrate-contracts-node-linux.tar.gz > substrate-contracts-node-linux.tar.gz
 RUN tar -xvzf substrate-contracts-node-linux.tar.gz
@@ -16,6 +16,7 @@ RUN mv ./artifacts/substrate-contracts-node-linux/substrate-contracts-node /usr/
 
 RUN rustup component add rust-src
 RUN cargo install --force --locked cargo-contract
+RUN apt install -y npm nodejs
 
 WORKDIR /app
 COPY server.js /app

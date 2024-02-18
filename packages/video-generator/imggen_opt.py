@@ -20,6 +20,10 @@ def process_file(i):
     prompt_file = f"{input_dir}/{str(i).zfill(3)}.imgprompt"
     image_file = f"{input_dir}/{str(i).zfill(3)}.png"
 
+    if os.path.exists(image_file):
+        print(f"Image for {i} already exists.")
+        return
+
     if os.path.exists(prompt_file):
         with open(prompt_file, 'r') as file:
             text = file.read()
